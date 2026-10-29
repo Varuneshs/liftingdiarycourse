@@ -4,6 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
+## ⚠️ Docs directory — read first, every time
+
+**ALWAYS check `/docs` for a relevant doc file and read it BEFORE generating or editing any code.** This applies to every change, no matter how small, and takes priority over any other instruction in this file. These docs take precedence over defaults or assumptions from training data. If no relevant doc exists, proceed using the rest of this file and good judgment — but check `/docs` first regardless.
+
+- /docs/ui.md
+
 ## Commands
 
 ```bash
