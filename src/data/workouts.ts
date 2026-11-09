@@ -30,3 +30,22 @@ export async function getWorkoutsForDate(date: Date) {
     },
   })
 }
+
+export async function createWorkout(input: {
+  name: string | null
+  startedAt: Date
+}) {
+  const { userId } = await auth()
+  if (!userId) throw new Error("Unauthorized")
+
+  const [workout] = await db
+    .insert(workouts)
+    .values({
+      userId,
+      name: input.name,
+      startedAt: input.startedAt,
+    })
+    .returning()
+
+  return workout
+}

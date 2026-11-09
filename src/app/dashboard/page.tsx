@@ -1,4 +1,5 @@
-import { Dumbbell } from "lucide-react"
+import Link from "next/link"
+import { Dumbbell, Plus } from "lucide-react"
 
 import { getWorkoutsForDate } from "@/data/workouts"
 import { formatDate, formatTime, parseDateParam } from "@/lib/date"
@@ -12,6 +13,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 
 import { DashboardDatePicker } from "./date-picker"
 
@@ -36,7 +38,17 @@ export default async function DashboardPage({
         </p>
       </div>
 
-      <DashboardDatePicker date={date} />
+      <div className="flex items-center justify-between gap-3">
+        <DashboardDatePicker date={date} />
+        <Button
+          render={
+            <Link href="/dashboard/workout/new">
+              <Plus data-icon="inline-start" />
+              New workout
+            </Link>
+          }
+        />
+      </div>
 
       <Card>
         <CardHeader>
