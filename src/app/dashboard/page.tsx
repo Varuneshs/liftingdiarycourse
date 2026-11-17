@@ -41,6 +41,7 @@ export default async function DashboardPage({
       <div className="flex items-center justify-between gap-3">
         <DashboardDatePicker date={date} />
         <Button
+          nativeButton={false}
           render={
             <Link href="/dashboard/workout/new">
               <Plus data-icon="inline-start" />
@@ -65,9 +66,12 @@ export default async function DashboardPage({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Dumbbell className="size-4 text-muted-foreground" />
-                        <span className="font-medium">
+                        <Link
+                          href={`/dashboard/workout/${workout.id}`}
+                          className="font-medium hover:underline"
+                        >
                           {workout.name ?? "Untitled workout"}
-                        </span>
+                        </Link>
                       </div>
                       {workout.startedAt && (
                         <Badge variant="secondary">

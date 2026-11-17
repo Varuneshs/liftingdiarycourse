@@ -31,6 +31,26 @@ export async function getWorkoutsForDate(date: Date) {
   })
 }
 
+export async function getWorkoutById(id: string) {
+  const { userId } = await auth()
+  if (!userId) throw new Error("Unauthorized")
+
+  const workout = await db.query.workouts.findFirst({
+    where: and(eq(workouts.id, id), eq(workouts.userId, userId)),
+    with: {
+      exercises: {
+        orderBy: [asc(exercises.order)],
+        with: {
+          definition: true,
+          sets: { orderBy: [asc(sets.setNumber)] },
+        },
+      },
+    },
+  })
+
+  return workout ?? null
+}
+
 export async function createWorkout(input: {
   name: string | null
   startedAt: Date
@@ -48,4 +68,41 @@ export async function createWorkout(input: {
     .returning()
 
   return workout
+}
+
+export async function updateWorkout(
+  id: string,
+  input: {
+    name: string | null
+    startedAt: Date
+    completedAt: Date | null
+  }
+) {
+  const { userId } = await auth()
+  if (!userId) throw new Error("Unauthorized")
+
+  // the userId filter is what stops another user's workout being updated
+  const [workout] = await db
+    .update(workouts)
+    .set({
+      name: input.name,
+      startedAt: input.startedAt,
+      completedAt: input.completedAt,
+    })
+    .where(and(eq(workouts.id, id), eq(workouts.userId, userId)))
+    .returning()
+
+  return workout ?? null
+}
+
+export async function deleteWorkout(id: string) {
+  const { userId } = await auth()
+  if (!userId) throw new Error("Unauthorized")
+
+  const [workout] = await db
+    .delete(workouts)
+    .where(and(eq(workouts.id, id), eq(workouts.userId, userId)))
+    .returning()
+
+  return workout ?? null
 }
